@@ -1,4 +1,5 @@
 @EndUserText.label: 'Service Definition for Travel'
 define service ZFG100_TRAVEL {
   expose ZFG100_C_Travel;
+  expose ZFG100_C_TravelItem;
 }

@@ -2,13 +2,9 @@
 "BASEINFO":
 {
 "FROM":
-[
-"ZFG100_TRAVEL"
-],
+[],
 "ASSOCIATED":
-[
-"ZFG100_R_TRAVELITEM"
-],
+[],
 "BASE":
 [],
 "ANNO_REF":

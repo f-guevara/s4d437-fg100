@@ -1,17 +1,22 @@
 managed implementation in class zbp_fg100_r_travel unique;
 strict ( 2 );
-
+with draft;
 define behavior for ZFG100_R_Travel alias Travel
-persistent table zfg100_travel
+persistent table zfg100_travel ##UNMAPPED_FIELD
+draft table zfg100_travel_d
 lock master
+total etag ChangedAt
 authorization master ( instance )
-etag master ChangedAt
+etag master LocChangedAt  //ChangedAt
 early numbering
+with additional save
 {
   create ( authorization : global );
-  update;
+  update ( features : instance );
   delete;
-  action cancel_travel;
+  action ( features : instance ) cancel_travel;
+
+  event TravelCreated parameter ZFG100_A_Event;
 
   validation validateDescription on save
   { create;
@@ -23,10 +28,51 @@ early numbering
   field CustomerId;
 }
 
+determination determineStatus on modify
+{ create;
+}
+
+determination determineDuration on save
+{ field BeginDate, EndDate;
+}
+determine action checkCustomer
+{
+  validation validateCustomer;
+}
+
+determine action adjustDuration
+{
+  determination determineDuration;
+}
+
+
+
+side effects
+{
+  determine action adjustDuration
+    executed on field BeginDate,
+    field EndDate
+    affects field Duration,
+    messages;
+}
+
+draft action Edit;
+  draft action Activate optimized;
+  draft action Discard;
+  draft action Resume;
+  draft determine action Prepare
+  {
+    validation validateDescription;
+    validation validateCustomer;
+    validation Item~validateFlightDate;
+  }
+
+  association _TravelItem { create; with draft; }
   //field ( readonly : update ) AgencyId, TravelId;
   //field ( mandatory : create ) AgencyId, TravelId;
-  field ( readonly ) Status, ChangedAt, ChangedBy;
-  field ( mandatory ) Description, CustomerId, BeginDate, EndDate;
+  field ( readonly ) Status, Duration, ChangedAt, ChangedBy, LocChangedAt;
+  field ( mandatory ) Description, EndDate;
+  field ( features : instance ) CustomerId, BeginDate;
 
   mapping for zfg100_travel corresponding
   {
@@ -37,5 +83,63 @@ early numbering
     EndDate    = end_date;
     ChangedAt  = changed_at;
     ChangedBy  = changed_by;
+    LocChangedAt = loc_changed_at;
   }
+}
+
+define behavior for ZFG100_R_TravelItem alias Item
+with unmanaged save
+draft table zfg100_tritem_d
+authorization dependent by _Travel
+lock dependent by _Travel
+etag master LocChangedAt
+{
+  update;
+  delete;
+
+  field ( readonly, numbering : managed ) ItemUuid;
+  field ( readonly ) AgencyId, TravelId;
+
+  validation validateFlightDate on save
+  { create;
+    field FlightDate;
+  }
+
+  association _Travel { with draft; }
+
+determination determineTravelDates on save
+{ field FlightDate;
+}
+  mapping for zfg100_tritem corresponding
+  {
+    ItemUuid          = item_uuid;
+    AgencyId          = agency_id;
+    TravelId          = travel_id;
+    CarrierId         = carrier_id;
+    ConnectionId      = connection_id;
+    FlightDate        = flight_date;
+    BookingId         = booking_id;
+    PassengerFirstName = passenger_first_name;
+    PassengerLastName = passenger_last_name;
+    ChangedAt         = changed_at;
+    ChangedBy         = changed_by;
+    LocChangedAt      = loc_changed_at;
+  }
+
+  mapping for /lrn/437_s_tritem
+control /lrn/437_s_tritemx corresponding
+{
+  ItemUuid           = item_uuid;
+  AgencyId           = agency_id;
+  TravelId           = travel_id;
+  CarrierId          = carrier_id;
+  ConnectionId       = connection_id;
+  FlightDate         = flight_date;
+  BookingId          = booking_id;
+  PassengerFirstName = passenger_first_name;
+  PassengerLastName  = passenger_last_name;
+  ChangedAt          = changed_at;
+  ChangedBy          = changed_by;
+  LocChangedAt       = loc_changed_at;
+}
 }

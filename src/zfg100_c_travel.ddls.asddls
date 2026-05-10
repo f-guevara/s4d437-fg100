@@ -19,7 +19,11 @@ define root view entity ZFG100_C_Travel
     CustomerId,
     BeginDate,
     EndDate,
+    @EndUserText.label: 'Duration (days)'
+    Duration,
     Status,
     ChangedAt,
-    ChangedBy
+    ChangedBy,
+    LocChangedAt,
+    _TravelItem : redirected to composition child ZFG100_C_TravelItem
 }

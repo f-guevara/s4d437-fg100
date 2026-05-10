@@ -13,12 +13,19 @@ annotate entity ZFG100_C_Travel
     with 
 {
 
-    @UI.facet: [ { id:            'Travel',
-                    purpose:       #STANDARD,
-                    type:          #IDENTIFICATION_REFERENCE,
-                    label:         'Travel',
-                    position:      10 }
-               ]
+    @UI.facet: [
+  { id:       'Travel',
+    purpose:  #STANDARD,
+    type:     #IDENTIFICATION_REFERENCE,
+    label:    'Travel',
+    position: 10 },
+  { id:            'TravelItem',
+    purpose:        #STANDARD,
+    type:           #LINEITEM_REFERENCE,
+    targetElement:  '_TravelItem',
+    label:          'Travel Items',
+    position:       20 }
+]
 
     @UI: {
            identification: [ { position: 10, importance: #LOW } ]
@@ -58,6 +65,12 @@ annotate entity ZFG100_C_Travel
            identification: [ { position: 60, importance: #LOW } ]
          }
     EndDate;
+    
+    @UI: {
+  lineItem:       [ { position: 35, importance: #LOW } ],
+  identification: [ { position: 65, importance: #LOW } ]
+}
+Duration;
 
     @UI: {
   lineItem:
@@ -76,5 +89,9 @@ Status;
 
     @UI.hidden: true
     ChangedBy;
+    
+    @UI.hidden: true
+    LocChangedAt;
+    
 
   }
