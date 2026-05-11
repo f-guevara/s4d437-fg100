@@ -1,0 +1,30 @@
+extension implementation in class zbp_fg100x_r_travel_class unique;
+
+// 1. Extend the root to hook into the draft Prepare action
+extend behavior for Travel
+{
+  extend draft determine action Prepare
+  {
+    // Syntax: Alias~ValidationName
+    validation Item~ZZvalidateClass;
+  }
+}
+
+
+extend behavior for Item
+with additional save
+{
+  validation ZZvalidateClass on save { create; field ZZClassZIT; }
+
+  determine action ( authorization : none ) ZZcheckClass
+  {
+    validation ZZvalidateClass;
+  }
+
+  // --- CORRECTED SYNTAX FOR SIDE EFFECT ---
+  side effects
+  {
+    determine action ZZcheckClass executed on field ZZClassZIT affects messages;
+  }
+  // ----------------------------------------
+}

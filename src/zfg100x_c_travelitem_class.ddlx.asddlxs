@@ -1,0 +1,9 @@
+@Metadata.layer: #CUSTOMER
+annotate view ZFG100_C_TravelItem with
+{
+  @UI: {
+    lineItem:       [ { position: 65, importance: #LOW } ],
+    identification: [ { position: 65, importance: #LOW } ]
+  }
+  ZZClassZIT;
+}

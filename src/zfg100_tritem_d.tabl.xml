@@ -9,6 +9,7 @@
     <CLIDEP>X</CLIDEP>
     <LANGDEP>X</LANGDEP>
     <DDTEXT>Draft table for entity ZFG100_R_TRAVELITEM</DDTEXT>
+    <MASTERLANG>E</MASTERLANG>
     <CONTFLAG>A</CONTFLAG>
     <EXCLASS>4</EXCLASS>
    </DD02V>
@@ -111,6 +112,14 @@
      <DDTEXT>Standard Include for Draft Administration (BDL Syntax Check)</DDTEXT>
      <COMPTYPE>S</COMPTYPE>
      <GROUPNAME>%ADMIN</GROUPNAME>
+    </DD03P>
+    <DD03P>
+     <FIELDNAME>.INCLUDE</FIELDNAME>
+     <ADMINFIELD>0</ADMINFIELD>
+     <PRECFIELD>ZFG100_S_EXT_TRITEM</PRECFIELD>
+     <MASK>      S</MASK>
+     <DDTEXT>Extension Include Structure for Travel Items</DDTEXT>
+     <COMPTYPE>S</COMPTYPE>
     </DD03P>
    </DD03P_TABLE>
    <TABL_EXTRAS>

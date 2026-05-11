@@ -2,6 +2,7 @@ projection;
 strict ( 2 );
 use draft;
 use side effects;
+extensible;
 
 define behavior for ZFG100_C_Travel
 use etag
@@ -23,6 +24,7 @@ use etag
 
 define behavior for ZFG100_C_TravelItem
 use etag
+extensible
 {
   use update;
   use delete;

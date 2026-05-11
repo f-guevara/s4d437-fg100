@@ -1,6 +1,14 @@
 managed implementation in class zbp_fg100_r_travel unique;
 strict ( 2 );
 with draft;
+
+extensible
+{
+  with additional save;
+  with validations on save;
+  with determinations on modify;
+  with determinations on save;
+}
 define behavior for ZFG100_R_Travel alias Travel
 persistent table zfg100_travel ##UNMAPPED_FIELD
 draft table zfg100_travel_d
@@ -10,6 +18,7 @@ authorization master ( instance )
 etag master LocChangedAt  //ChangedAt
 early numbering
 with additional save
+extensible
 {
   create ( authorization : global );
   update ( features : instance );
@@ -60,7 +69,7 @@ draft action Edit;
   draft action Activate optimized;
   draft action Discard;
   draft action Resume;
-  draft determine action Prepare
+  draft determine action Prepare extensible
   {
     validation validateDescription;
     validation validateCustomer;
@@ -74,7 +83,7 @@ draft action Edit;
   field ( mandatory ) Description, EndDate;
   field ( features : instance ) CustomerId, BeginDate;
 
-  mapping for zfg100_travel corresponding
+  mapping for zfg100_travel corresponding ##UNEXTENSIBLE_MAPPING
   {
     AgencyID   = agency_id;
     TravelID   = travel_id;
@@ -93,6 +102,7 @@ draft table zfg100_tritem_d
 authorization dependent by _Travel
 lock dependent by _Travel
 etag master LocChangedAt
+extensible
 {
   update;
   delete;
@@ -110,7 +120,7 @@ etag master LocChangedAt
 determination determineTravelDates on save
 { field FlightDate;
 }
-  mapping for zfg100_tritem corresponding
+  mapping for zfg100_tritem corresponding ##UNEXTENSIBLE_MAPPING
   {
     ItemUuid          = item_uuid;
     AgencyId          = agency_id;
@@ -127,7 +137,7 @@ determination determineTravelDates on save
   }
 
   mapping for /lrn/437_s_tritem
-control /lrn/437_s_tritemx corresponding
+control /lrn/437_s_tritemx corresponding ##UNEXTENSIBLE_MAPPING
 {
   ItemUuid           = item_uuid;
   AgencyId           = agency_id;
